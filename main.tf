@@ -3,7 +3,7 @@
 #  usernames  = ["stephengroat-dd", "joshhuie"]
 #}
 
-module "terraform_membership" {
-  source = "./github_membership"
-#  usernames  = ["stephengroat-dd", "joshhuie"]
-}
+# module "github_team_membership" {
+#   source = "./github_team"
+#   user_info = {"stephengroat-dd" = ["team1"]}
+# }
