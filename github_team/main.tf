@@ -3,8 +3,8 @@ provider "github" {}
 variable teams {
   type = set(string)
   default = [
-    "team-1",
-    "team-2"
+    "secdev",
+    "xuxu"
   ]
 }
 
@@ -16,19 +16,19 @@ resource "github_team" "team" {
 resource "github_team_membership" "team-member" {
   for_each = local.users_list
   username = split(",", each.value)[0]
-  team_id  = local.team_list[split(",", each.value)[1]].id
+  team_id  = lookup(local.team_list, split(",", each.value)[1], "none")
 }
 
 variable user_info {
   default = {
-    "secdev" = [ "joshhuie", "stephengroat-dd" ]
+    "joshhuie" = [ "secdev", "xuxu" ]
+    "stephengroat-dd" = ["secdev"]
+    "ivantopolcic" = ["xuxu"]
   }
 }
 
 locals { 
-  team_list = for team in var.teams : { 
-    team = github_team.team["team-1"].id
-  }
+  team_list = {for teamname in var.teams: teamname => github_team.team[teamname].id}
   users_list = toset(flatten([
     for user, teams in var.user_info : [
       for team in teams : [
