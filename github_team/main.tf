@@ -17,6 +17,13 @@ variable user_info {
   }
 }
 
+# Add github organization memebership for each user
+resource "github_membership" "team-member" {
+  for_each = var.user_info
+  username = each.key
+  role = "member"
+}
+
 # TODO see if a data block can be used instead of a resource block to avoid team creation
 resource "github_team" "team" {
   for_each = var.teams
