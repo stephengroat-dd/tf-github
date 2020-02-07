@@ -8,6 +8,16 @@ variable teams {
   ]
 }
 
+# TODO test a reorder to make sure not removed and re-added
+variable user_info {
+  default = {
+    "joshhuie" = [ "secdev", "xuxu" ]
+    "stephengroat-dd" = ["secdev"]
+    "ivantopolcic" = ["xuxu"]
+  }
+}
+
+# TODO see if a data block can be used instead of a resource block to avoid team creation
 resource "github_team" "team" {
   for_each = var.teams
   name = each.value
@@ -17,14 +27,6 @@ resource "github_team_membership" "team-member" {
   for_each = local.users_list
   username = split(",", each.value)[0]
   team_id  = lookup(local.team_list, split(",", each.value)[1], "none")
-}
-
-variable user_info {
-  default = {
-    "joshhuie" = [ "secdev", "xuxu" ]
-    "stephengroat-dd" = ["secdev"]
-    "ivantopolcic" = ["xuxu"]
-  }
 }
 
 locals { 
@@ -40,12 +42,4 @@ locals {
       ]
     ]
   ]))
-}
-
-output users_list {
-  value = local.users_list
-}
-
-output teams_list {
-  value = local.team_list
 }
