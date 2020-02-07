@@ -1,5 +1,3 @@
-provider "github" {}
-
 # Add github organization memebership for each user
 resource "github_membership" "team-member" {
   for_each = var.user_info
