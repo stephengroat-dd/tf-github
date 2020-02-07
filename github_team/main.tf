@@ -28,10 +28,14 @@ variable user_info {
 }
 
 locals { 
+  # map of team to team ID
   team_list = {for teamname in var.teams: teamname => github_team.team[teamname].id}
+  # set of strings of users and any associated teams in CSV format, duplicating entries for users with multiple team membership
   users_list = toset(flatten([
     for user, teams in var.user_info : [
       for team in teams : [
+        # from https://github.com/join, "Username may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen."
+        # TODO Find restrictions on organization names
         join(",", [user, team])
       ]
     ]
